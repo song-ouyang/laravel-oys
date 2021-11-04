@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Imformatioin;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use App\Models\Imformatioin;
+
 
 class User extends \Illuminate\Foundation\Auth\User implements JWTSubject,Authenticatable
 {
@@ -129,6 +130,22 @@ class User extends \Illuminate\Foundation\Auth\User implements JWTSubject,Authen
         return $this->attributes[$identifier_name];
     }
 
+    /**
+     * 修改super密码
+     * @param $request
+     */
+    public static function update1($account,$password)
+    {
+        try {
+            $res=self::where('account',$account)->update([
+                'password'=>$password
 
+            ]);
+            return $res;
+        } catch (\Exception $e) {
+            logError('存储个人信息失败！', [$e->getMessage()]);
+            return false;
+        }
+    }
 
 }

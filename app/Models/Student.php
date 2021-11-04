@@ -10,12 +10,11 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class Student extends \Illuminate\Foundation\Auth\User implements JWTSubject,Authenticatable
 {
     use Notifiable;
-    public $timestamps = false;
+
     public $table = 'student';
     protected $remeberTokenName = NULL;
-  //  protected $primaryKey = "student_id";
     protected $guarded = [];
-//    protected $fillable = [ 'password', 'name', 'phone','email','student_id'];
+    protected $fillable = [ 'password', 'name', 'phone','email','account'];
     protected $hidden = [
         'password',
     ];
@@ -65,7 +64,6 @@ class Student extends \Illuminate\Foundation\Auth\User implements JWTSubject,Aut
                     'student_name' => $request['student_name'],
                     'student_email' => $request['student_email'],
                     'student_phone' => $request['student_phone'],
-
                 ]
             );
             return $res ?
@@ -77,109 +75,7 @@ class Student extends \Illuminate\Foundation\Auth\User implements JWTSubject,Aut
         }
     }
 
-    /***
-     * @param $student_id
-     * @param $student_password
-     * @param $student_name
-     * @param $student_phone
-     * @param $student_email
-     * @return false
-     */
-    public static function establish( $student_id,
-                                      $student_password,
-                                      $student_name,
-                                      $student_phone,
-                                      $student_email)
-    {
-        try {
-            $res = self::insert(
-                [
-                    'student_id'=>$student_id,
-                    'student_password'=>$student_password,
-                    'student_name'=>$student_name,
-                    'student_phone'=>$student_phone,
-                    'student_email'=>$student_email,
-                ]);
-            return  $res?
-                $res :
-                false;
-        }catch (\Exception $e ){
-            logError('搜索错误', [$e->getMessage()]);
-            return false;
-        }
-    }
 
-    /***
-     * yjx
-     *修改
-     * @param $student_id
-     * @param $student_password
-     * @param $student_name
-     * @param $student_phone
-     * @param $student_email
-     * @return false
-     */
-    public static function modify($student_id,$student_password,$student_name,$student_phone,$student_email){
-        try {
-            $res =Student::where('student_id',$student_id)->update(
-                [
-                    //'stuid' => $stuid,
-                    'student_password'=>$student_password,
-                    'student_name'=>$student_name,
-                    'student_phone'=>$student_phone,
-                    'student_email'=>$student_email
-                ]
-            );
-            return $res?
-                $res:
-                false;
-
-        }catch (\Exception $e){
-            logError('搜索错误', [$e->getMessage()]);
-            return false;
-        }
-
-    }
-
-    /***
-     * yjx
-     * 删除
-     * @param $student_id
-     * @return false
-     */
-    public static function delect($student_id)
-    {
-        try {
-            $res = Student::where('student_id','=',$student_id)->delete();
-            return $res ?
-                $res :
-                false;
-
-        }catch (\Exception $e){
-            logError('搜索错误', [$e->getMessage()]);
-            return false;
-        }
-    }
-
-    /***
-     * yjx
-     * 查询
-     * @param $student_id
-     * @return false
-     */
-    public static function show($student_id)
-    {
-        try {
-            $res = Student::where('student_id', $student_id)->get();
-            return $res ?
-                $res :
-                false;
-
-        } catch (\Exception $e) {
-            logError('搜索错误', [$e->getMessage()]);
-            return false;
-        }
-    }
 
 
     /**
@@ -192,9 +88,10 @@ class Student extends \Illuminate\Foundation\Auth\User implements JWTSubject,Aut
     {
         $student_job_number = $request['account'];
         try{
-            $count = User::select('account')
+            $count = self::select('account')
                 ->where('account',$student_job_number)
                 ->count();
+
             //echo "该账号存在个数：".$count;
             //echo "\n";
             return $count;
@@ -233,22 +130,21 @@ class Student extends \Illuminate\Foundation\Auth\User implements JWTSubject,Aut
         return $this->attributes[$identifier_name];
     }
 
-
     /**
-     * oys
-     * 查询学生负责人个人信息
-     * @param $stuid
-     * @param $password
-     * @return false
+     * 修改student密码
+     * @param $request
      */
-    public static function SelectStudent($student_id,$student_password){
+    public static function update1($account,$password)
+    {
         try {
-            $res = Student::where('student_id',$student_id)->where('student_password',$student_password)->first();
+            $res=self::where('account',$account)->update([
+                'password'=>$password
+
+            ]);
             return $res;
-        }catch (\Exception $e){
-            logError('获取学生负责人个人信息失败',[$e->getMessage()]);
+        } catch (\Exception $e) {
+            logError('存储个人信息失败！', [$e->getMessage()]);
             return false;
         }
     }
-
 }

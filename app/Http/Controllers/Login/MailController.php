@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Login;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -16,9 +17,9 @@ class MailController extends Controller
             $a = rand(0,9); //0-9随机数
             $yzm.= $a;
         }
-        
+
         $email=$request->get('email');
-      
+
         Mail::raw($yzm, function ($message)use ($email){
             // * 如果你已经设置过, mail.php中的from参数项,可以不用使用这个方法,直接发送
             // $message->from("1182468610@qq.com", "laravel学习测试");

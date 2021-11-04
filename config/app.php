@@ -175,6 +175,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        Jacobcyl\AliOSS\AliOssServiceProvider::class,
         App\Providers\RepositoryServiceProvider::class
     ],
 
@@ -226,6 +227,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'AliYunOss' => Jacobcyl\AliOSS\AliOssServiceProvider::class,
         'Image' => Intervention\Image\Facades\Image::class
     ],
 

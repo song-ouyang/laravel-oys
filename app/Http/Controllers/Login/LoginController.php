@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Login;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserInfo\Registered;
 use App\Models\Admin;
 use App\Models\Student;
 use Illuminate\Http\Request;
@@ -25,9 +24,6 @@ class LoginController extends Controller
             if (!$token = auth('api')->attempt($credentials)) {
                 return json_fail(100, '账号或者密码错误!', null);
             }
-
-
-
             return self::respondWithToken($token, '登录成功!');
         } catch (\Exception $e) {
 
@@ -50,12 +46,8 @@ class LoginController extends Controller
             if (!$token = auth('apis')->attempt($credentials)) {
                 return json_fail(100, '账号或者密码错误!', null);
             }
-
-
-
             return self::respondWithToken($token, '登录成功!');
         } catch (\Exception $e) {
-
             echo $e->getMessage();
             return json_fail(500, '登录失败!', null, 500);
         }
@@ -76,16 +68,13 @@ class LoginController extends Controller
             if (!$token = auth('apiss')->attempt($credentials)) {
                 return json_fail(100, '账号或者密码错误!', null);
             }
-
-
-
             return self::respondWithToken($token, '登录成功!');
         } catch (\Exception $e) {
-
             echo $e->getMessage();
             return json_fail(500, '登录失败!', null, 500);
         }
     }
+
 
     /**
      * 注销登录
@@ -136,20 +125,12 @@ class LoginController extends Controller
 
                 return  $student_id ?
                     json_success('注册成功!',$student_id,200  ) :
-                    json_success('注册失败!',$student_id,100  ) ;
-
-
-
+                    json_success('注册失败!',null,100  ) ;
         }
         else{
             return
                 json_success('注册失败!该工号已经注册过了！',null,100  ) ;
         }
-
-
-
-
-
     }
 
 
@@ -203,20 +184,14 @@ class LoginController extends Controller
             return  $student_id ?
                 json_success('注册成功!',$student_id,200  ) :
                 json_success('注册失败!',$student_id,100  ) ;
-
-
-
         }
         else{
             return
                 json_success('注册失败!该工号已经注册过了！',null,100  ) ;
         }
-
-
-
-
-
     }
+
+
 
 
     protected function userHandle($request)
@@ -227,8 +202,6 @@ class LoginController extends Controller
         $registeredInfo['phone'] = $registeredInfo['phone'];
         $registeredInfo['email'] = $registeredInfo['email'];
         $registeredInfo['account'] = $registeredInfo['account'];
-
-
         return $registeredInfo;
     }
 
@@ -237,6 +210,7 @@ class LoginController extends Controller
     {
         $registeredInfo = $request->except('password_confirmation');
         $registeredInfo['password'] = bcrypt($registeredInfo['password']);
+
         $registeredInfo['name'] = $registeredInfo['name'];
         $registeredInfo['phone'] = $registeredInfo['phone'];
         $registeredInfo['email'] = $registeredInfo['email'];
@@ -248,20 +222,48 @@ class LoginController extends Controller
     }
 
 
+    public function change1(Request $request){
 
+        $account=$request->get('account');
+        $password=$request->get('password');
+        $password= bcrypt($password);
 
-    public function test(Request $request){
-        $id = Auth::id();
-        echo $id;
+        $res=User::update1($account,$password);
+        return $res ?
+            json_success("操作成功", $res, 200) :
+            json_fail("操作失败", $res, 100);
+
     }
 
-    public function admin(Request $request){
-    $id = Auth::id();
-    echo "你好普通管理员！";
-}
-    public function superadmin(Request $request){
-        $id = Auth::id();
-        echo "你好超级管理员！";
+
+    /**修改admin密码
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function change2(Request $request){
+        $account=$request->get('account');
+        $password=$request->get('password');
+        $password= bcrypt($password);
+
+        $res=Admin::update1($account,$password);
+        return $res ?
+            json_success("操作成功", $res, 200) :
+            json_fail("操作失败", $res, 100);
+
+    }
+    /**修改admin密码
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function change3(Request $request){
+        $account=$request->get('account');
+        $password=$request->get('password');
+        $password= bcrypt($password);
+
+        $res=Student::update1($account,$password);
+        return $res ?
+            json_success("操作成功", $res, 200) :
+            json_fail("操作失败", $res, 100);
     }
 
 }
