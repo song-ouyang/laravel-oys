@@ -11,7 +11,6 @@ class MailController extends Controller
 {
     public function send(EmailRequest  $request)
     {
-
         $yzm = "";
         for($i=0;$i<4;$i++)
         {

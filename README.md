@@ -1,50 +1,13 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+#### 1.登录注册修改密码（超管，管理员，学生）
 
-### Laravel6
+对应的controller层和model里面封装好了
 
-#### 对Laravel6进行了小修改（也不算是修改,就算是把常用的东西整合上去）
+#### 2.邮箱验证
 
-#### 1、返回接口统一
-    文件位置：
-        App\Helpers\json.php;
-    使用：
-        json_success($msg, $data);
-        json_fail($msg, $data);
-#### 2、Monolog\Logger整合
-    文件位置：
-        App\Helpers\logger.php;
-    使用：
-        logInfo($title, [$msg]);
-        logWarning($title, [$msg]);
-        logError($title, [$msg]);
-        logDebug($title, [$msg]);
-#### 3、JWT整合
-    文件位置：
-        App\Models\User
-    使用：
-        jwt整合到了auth，使用与auth一样
-#### 4、重写了异常处理
-    文件位置：
-        App\Exceptions\Handler
+在.env里面配置 邮箱和对应的授权码即可（修改默认在config/mail.php)里面
 
-#### 5、整合了Repositories 设计模式
-        生成对应文件：
-            php artisan init:model-service
-        文件位置：
-            App\Repositories\*
-            App\Facades\*
-            App\Providers\RepositoryServiceProvider
-        使用：
-            use App\Facades\***;
-            ***::getFirst()...
-        这里封装的的方法可以查看:
-            App\Traits\RepositoryBaseRepositoryTrait
-            App\Repositories\CommonRepository
-#### 6、在Helpers中封装了很多方法，也可以自己添加方法
-        文件位置：
-            App\Helpers\*
-#### 7、在 App\Traits\Controller\*下封装了一些公共的Controller方法，需要使用就use
-        文件位置：
-            App\Traits\Controller\*
-        使用：
-            use App\Facades\Controller\***;
+#### 3.oss文件上传
+
+1.直接上传到我的oss， config/filesystems.php 里面
+
+ 2.在env里面设置 对应的参数，在config/filesystems.php里面设置 对应的路径

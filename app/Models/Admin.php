@@ -64,7 +64,6 @@ class Admin extends \Illuminate\Foundation\Auth\User implements JWTSubject,Authe
                     'student_name' => $request['student_name'],
                     'student_email' => $request['student_email'],
                     'student_phone' => $request['student_phone'],
-
                 ]
             );
             return $res ?
