@@ -43,7 +43,7 @@ return [
 
         'api' => [
             'driver' => 'jwt',
-            'provider' => 'users',
+            'provider' => 'superadmin',
         ],
 
         'apis' => [
@@ -76,9 +76,9 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'superadmin' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\Superadmin::class,
         ],
 
          'admin' => [

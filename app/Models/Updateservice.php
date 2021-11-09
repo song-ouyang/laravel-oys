@@ -12,7 +12,7 @@ class Updateservice extends Model
         $path = $fileObj->store($remoteDir,'oss');
         $imgUrl =config("filesystems.disks.oss.endpoint")."/".$path;
         if ( $path ){
-            return ["status" => "SUCCESS","fileUrl" => $imgUrl];
+            return $imgUrl;
         }
         return ["status" => "ERROR","fileUrl" => ""];
     }

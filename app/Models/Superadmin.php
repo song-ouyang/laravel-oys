@@ -2,15 +2,18 @@
 
 namespace App\Models;
 
+
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Admin extends \Illuminate\Foundation\Auth\User implements JWTSubject,Authenticatable
+
+class Superadmin extends \Illuminate\Foundation\Auth\User implements JWTSubject,Authenticatable
 {
+    //
     use Notifiable;
 
-    public $table = 'admin';
+    public $table = 'superadmin';
     protected $remeberTokenName = NULL;
     protected $guarded = [];
     protected $fillable = [ 'password', 'name', 'phone','email','account'];
@@ -38,8 +41,6 @@ class Admin extends \Illuminate\Foundation\Auth\User implements JWTSubject,Authe
     public static function createUser($array = [])
     {
         try {
-
-
             $student_id = self::create($array)->id;
             return $student_id ?
                 $student_id :
@@ -64,7 +65,6 @@ class Admin extends \Illuminate\Foundation\Auth\User implements JWTSubject,Authe
                     'student_name' => $request['student_name'],
                     'student_email' => $request['student_email'],
                     'student_phone' => $request['student_phone'],
-
                 ]
             );
             return $res ?
@@ -86,10 +86,9 @@ class Admin extends \Illuminate\Foundation\Auth\User implements JWTSubject,Authe
     {
         $student_job_number = $request['account'];
         try{
-            $count = self::select('account')
+            $count = Superadmin::select('account')
                 ->where('account',$student_job_number)
                 ->count();
-
             //echo "该账号存在个数：".$count;
             //echo "\n";
             return $count;
@@ -114,7 +113,6 @@ class Admin extends \Illuminate\Foundation\Auth\User implements JWTSubject,Authe
     public function getAuthIdentifierName()
     {
         // Return the name of unique identifier for the user (e.g. "id")
-
         return 'id';
     }
 
@@ -128,9 +126,8 @@ class Admin extends \Illuminate\Foundation\Auth\User implements JWTSubject,Authe
         return $this->attributes[$identifier_name];
     }
 
-
     /**
-     * 修改admin密码
+     * 修改super密码
      * @param $request
      */
     public static function update1($account,$password)
@@ -142,15 +139,9 @@ class Admin extends \Illuminate\Foundation\Auth\User implements JWTSubject,Authe
             ]);
             return $res;
         } catch (\Exception $e) {
-            logError('修改密码失败！', [$e->getMessage()]);
+            logError('存储个人信息失败！', [$e->getMessage()]);
             return false;
         }
     }
+
 }
-
-
-
-
-
-
-

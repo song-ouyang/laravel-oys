@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Login;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Login\LoginRequest;
+use App\Http\Requests\Login\RegisteredRequest;
+use App\Http\Requests\Login\UpdateRequest;
 use App\Models\Admin;
 use App\Models\Student;
+use App\Models\Superadmin;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +20,7 @@ class LoginController extends Controller
      * @param Request $loginRequest
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login(Request $loginRequest)
+    public function login(LoginRequest $loginRequest)
     {
 
         try {
@@ -26,7 +30,6 @@ class LoginController extends Controller
             }
             return self::respondWithToken($token, '登录成功!');
         } catch (\Exception $e) {
-
             echo $e->getMessage();
             return json_fail(500, '登录失败!', null, 500);
         }
@@ -38,7 +41,7 @@ class LoginController extends Controller
      * @param Request $loginRequest
      * @return \Illuminate\Http\JsonResponse
      */
-    public function adminlogin(Request $loginRequest)
+    public function adminlogin(LoginRequest $loginRequest)
     {
 
         try {
@@ -56,11 +59,11 @@ class LoginController extends Controller
 
 
     /**
-     * admin登录
+     * student登录
      * @param Request $loginRequest
      * @return \Illuminate\Http\JsonResponse
      */
-    public function studentlogin(Request $loginRequest)
+    public function studentlogin(LoginRequest $loginRequest)
     {
 
         try {
@@ -111,18 +114,17 @@ class LoginController extends Controller
     }
 
     /**
-     * 注册
+     * 超管注册
      * @param Request $registeredRequest
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function registered(Request $registeredRequest)
+    public function registered(RegisteredRequest $registeredRequest)
     {
-        $count = User::checknumber($registeredRequest);
+        $count = Superadmin::checknumber($registeredRequest);
         if($count == 0)
         {
-            $student_id = User::createUser(self::userHandle($registeredRequest));
-
+            $student_id = Superadmin::createUser(self::userHandle($registeredRequest));
                 return  $student_id ?
                     json_success('注册成功!',$student_id,200  ) :
                     json_success('注册失败!',null,100  ) ;
@@ -141,29 +143,20 @@ class LoginController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function registereds(Request $registeredRequest)
+    public function registereds(RegisteredRequest $registeredRequest)
     {
         $count = Admin::checknumber($registeredRequest);
         if($count == 0)
         {
-            $student_id = Admin::createUser(self::userHandle2($registeredRequest));
-
+            $student_id = Admin::createUser(self::userHandle($registeredRequest));
             return  $student_id ?
                 json_success('注册成功!',$student_id,200  ) :
                 json_success('注册失败!',$student_id,100  ) ;
-
-
-
         }
         else{
             return
                 json_success('注册失败!该工号已经注册过了！',null,100  ) ;
         }
-
-
-
-
-
     }
 
 
@@ -174,7 +167,7 @@ class LoginController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function registeredss(Request $registeredRequest)
+    public function registeredss(RegisteredRequest $registeredRequest)
     {
         $count = Student::checknumber($registeredRequest);
         if($count == 0)
@@ -193,7 +186,7 @@ class LoginController extends Controller
 
 
 
-
+    //
     protected function userHandle($request)
     {
         $registeredInfo = $request->except('password_confirmation');
@@ -216,19 +209,19 @@ class LoginController extends Controller
         $registeredInfo['email'] = $registeredInfo['email'];
         $registeredInfo['account'] = $registeredInfo['account'];
 
-        $registeredInfo['type'] = $registeredInfo['type'];
+       // $registeredInfo['type'] = $registeredInfo['type'];
 
         return $registeredInfo;
     }
 
 
-    public function change1(Request $request){
+    public function change1(UpdateRequest $request){
 
         $account=$request->get('account');
         $password=$request->get('password');
         $password= bcrypt($password);
 
-        $res=User::update1($account,$password);
+        $res=Superadmin::update1($account,$password);
         return $res ?
             json_success("操作成功", $res, 200) :
             json_fail("操作失败", $res, 100);
@@ -240,7 +233,7 @@ class LoginController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function change2(Request $request){
+    public function change2(UpdateRequest $request){
         $account=$request->get('account');
         $password=$request->get('password');
         $password= bcrypt($password);
@@ -255,7 +248,7 @@ class LoginController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function change3(Request $request){
+    public function change3(UpdateRequest $request){
         $account=$request->get('account');
         $password=$request->get('password');
         $password= bcrypt($password);
