@@ -10,7 +10,8 @@ class Updateservice extends Model
     //上传文件
     public static function doUpload($fileObj,$remoteDir){
         $path = $fileObj->store($remoteDir,'oss');
-        $imgUrl =config("filesystems.disks.oss.endpoint")."/".$path;
+      //  $imgUrl =config("filesystems.disks.oss.endpoint")."/".$path;
+          $imgUrl ="http://uploadphoto.oys68.cn"."/".$path;
         if ( $path ){
             return $imgUrl;
         }

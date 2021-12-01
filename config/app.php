@@ -174,8 +174,10 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
+        AetherUpload\AetherUploadServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Jacobcyl\AliOSS\AliOssServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
         App\Providers\RepositoryServiceProvider::class
     ],
 
@@ -228,6 +230,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'AliYunOss' => Jacobcyl\AliOSS\AliOssServiceProvider::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Image' => Intervention\Image\Facades\Image::class
     ],
 

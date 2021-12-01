@@ -43,7 +43,13 @@ Route::prefix('user')->group(function () {
  * oys
  */
 Route::prefix('file')->group(function () {
-    Route::post('photo', 'File\FileController@upload'); //学生负责人个人信息查看  1
+    Route::post('photo', 'File\FileController@upload'); //上传图片，小视频，文件 到oss
+    Route::any('downloadfile', 'File\FileController@downloadfile'); //下载到框架内 storage/app/aetherupload/file
+
+    Route::post('uposs', 'File\FileController@uposs'); //下载到oss
+    Route::get('outexcel', 'File\ExcelController@outexcel'); //导出excel
+    Route::post('inputexcel', 'File\ExcelController@inputexcel'); //导出excel
+
 });
 
 /**
@@ -55,3 +61,4 @@ Route::prefix('email')->group(function () {
 });
 
 
+Route::post('change3', 'Login\LoginController@change3'); //student修改密码
